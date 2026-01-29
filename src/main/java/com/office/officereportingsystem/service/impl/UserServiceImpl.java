@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
                 .firstName(dto.getFirstName().trim())
                 .middleName(dto.getMiddleName().trim())
                 .lastName(dto.getLastName().trim())
-                .email(dto.getEmail())
+                .email(normalizedEmail)
                 .password(passwordEncoder.encode(dto.getPassword()))
                 .role(dto.getRole() != null ? dto.getRole() : Role.USER)
                 .createdAt(LocalDateTime.now())
