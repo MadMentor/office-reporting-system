@@ -1,0 +1,5 @@
+spring.datasource.url: jdbc:postgresql://localhost:5432/ors
+spring.datasource.username: postgres
+spring.datasource.password: faithfulcrow778
+spring.jpa.show-sql: true
+spring.jpa.hibernate.ddl-auto: update
