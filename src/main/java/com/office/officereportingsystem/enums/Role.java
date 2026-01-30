@@ -1,7 +1,7 @@
 package com.office.officereportingsystem.enums;
 
 public enum Role {
-    SUPERADMIN,
+    SUPER_ADMIN,
     ADMIN,
     USER
 }
