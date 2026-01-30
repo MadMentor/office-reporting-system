@@ -30,4 +30,13 @@ public class GlobalExceptionHandler {
 
         return "redirect:/super-admin/admin/create";
     }
+
+    @ExceptionHandler(AccountNotFoundException.class)
+    public String handleAccountNotFoundException(
+            AccountNotFoundException ex,
+            RedirectAttributes redirectAttributes) {
+
+        redirectAttributes.addFlashAttribute("error", ex.getMessage());
+        return "redirect:/super-admin/admin";
+    }
 }
