@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<!-- Flash messages fragment -->
+<div th:fragment="flash">
+
+    <!-- Success message -->
+    <div th:if="${message}" class="flash-message success" th:text="#{${message}}"></div>
+
+    <!-- Error message -->
+    <div th:if="${error}" class="flash-message error" th:text="${error}"></div>
+
+
+    <style>
+        .flash-message {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 5px;
+            color: #fff;
+            font-weight: bold;
+            z-index: 9999;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .flash-message.success { background-color: #28a745; }
+        .flash-message.error { background-color: #dc3545; }
+    </style>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const messages = document.querySelectorAll('.flash-message');
+            messages.forEach((msg, index) => {
+                msg.style.top = `${20 + index * 60}px`; // stack if multiple
+
+                setTimeout(() => {
+                    msg.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    msg.style.opacity = '0';
+                    msg.style.transform = 'translateX(100%)';
+                    setTimeout(() => msg.remove(), 500);
+                }, 3000);
+            });
+        });
+    </script>
+
+</div>
+</body>
+</html>

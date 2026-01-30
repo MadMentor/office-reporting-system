@@ -1,41 +1,43 @@
 package com.office.officereportingsystem.service.impl;
 
-import com.office.officereportingsystem.dto.request.UserCreateRequestDto;
+import com.office.officereportingsystem.dto.request.AdminCreateRequestDto;
 import com.office.officereportingsystem.entity.User;
 import com.office.officereportingsystem.enums.Role;
 import com.office.officereportingsystem.exception.UserAlreadyExistsException;
 import com.office.officereportingsystem.repository.UserRepo;
-import com.office.officereportingsystem.service.UserService;
+import com.office.officereportingsystem.service.SuperAdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService {
-
+@Transactional
+public class SuperAdminServiceImpl implements SuperAdminService {
     private final UserRepo userRepo;
     private final PasswordEncoder passwordEncoder;
+
     @Override
-    public User createUser(UserCreateRequestDto dto) {
+    public void createAdmin(AdminCreateRequestDto dto) {
         String normalizedEmail = dto.getEmail().trim().toLowerCase();
 
-//        if (userRepo.findByEmail(normalizedEmail).isPresent()) {
-//            throw new UserAlreadyExistsException("USER_EMAIL_ALREADY_EXISTS", dto);
-//        }
+        if (userRepo.findByEmail(normalizedEmail).isPresent()) {
+            throw new UserAlreadyExistsException("USER_EMAIL_ALREADY_EXISTS", dto);
+        }
 
         User user = User.builder()
                 .firstName(dto.getFirstName().trim())
-                .middleName(dto.getMiddleName().trim())
+                .middleName(dto.getMiddleName() == null ? null : dto.getMiddleName().trim())
                 .lastName(dto.getLastName().trim())
                 .email(normalizedEmail)
                 .password(passwordEncoder.encode(dto.getPassword()))
-                .role(dto.getRole() != null ? dto.getRole() : Role.USER)
+                .role(Role.ADMIN)
                 .createdAt(LocalDateTime.now())
                 .build();
 
-        return userRepo.save(user);
+        userRepo.save(user);
     }
 }
