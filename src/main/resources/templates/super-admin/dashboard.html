@@ -5,13 +5,24 @@
   <title>Office Reporting System</title>
   <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
+
 <body>
 
 <header>
   <h1>Office Reporting System (ORS)</h1>
   <p>Manage office operations efficiently</p>
 </header>
-<body>
+
+<div th:replace="~{fragments/flash-messages :: flash}"></div>
+
+<section>
+  <a th:href="@{/super-admin/admin/create}" class="btn btn-primary">
+    Create Admin
+  </a>
+  <a th:href="@{/super-admin/admin}" class="btn btn-secondary">
+    View Admins
+  </a>
+</section>
 
 </body>
 </html>
