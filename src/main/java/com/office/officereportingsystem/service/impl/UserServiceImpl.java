@@ -1,9 +1,8 @@
 package com.office.officereportingsystem.service.impl;
 
-import com.office.officereportingsystem.dto.request.UserCreateRequestDto;
+import com.office.officereportingsystem.dto.request.UserCreateRequestDtos;
 import com.office.officereportingsystem.entity.User;
 import com.office.officereportingsystem.enums.Role;
-import com.office.officereportingsystem.exception.UserAlreadyExistsException;
 import com.office.officereportingsystem.repository.UserRepo;
 import com.office.officereportingsystem.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +18,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepo userRepo;
     private final PasswordEncoder passwordEncoder;
     @Override
-    public User createUser(UserCreateRequestDto dto) {
+    public User createUser(UserCreateRequestDtos dto) {
         String normalizedEmail = dto.getEmail().trim().toLowerCase();
 
 //        if (userRepo.findByEmail(normalizedEmail).isPresent()) {

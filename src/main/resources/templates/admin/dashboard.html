@@ -1,10 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Office Reporting System</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
+
 <body>
+
+<header>
+    <h1>Office Reporting System (ORS)</h1>
+    <p>Manage office operations efficiently</p>
+</header>
+
+<div th:replace="~{fragments/flash-messages :: flash}"></div>
+
+<section>
+    <a th:href="@{/admin/user/create}" class="btn btn-primary">
+        Create User
+    </a>
+    <a th:href="@{/admin/user}" class="btn btn-secondary">
+        View Users
+    </a>
+</section>
 
 </body>
 </html>

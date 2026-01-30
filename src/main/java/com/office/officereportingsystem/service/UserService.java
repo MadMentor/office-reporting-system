@@ -1,6 +1,6 @@
 package com.office.officereportingsystem.service;
 
-import com.office.officereportingsystem.dto.request.UserCreateRequestDto;
+import com.office.officereportingsystem.dto.request.UserCreateRequestDtos;
 import com.office.officereportingsystem.entity.User;
 import com.office.officereportingsystem.exception.UserAlreadyExistsException;
 
@@ -17,5 +17,5 @@ public interface UserService {
      * @return saved User entity
      * @throws UserAlreadyExistsException if email is already used
      */
-    User createUser(UserCreateRequestDto userCreateRequestDto);
+    User createUser(UserCreateRequestDtos userCreateRequestDto);
 }

@@ -6,7 +6,7 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserCreateRequestDto {
+public class UserCreateRequestDtos {
     private String firstName;
     private String middleName;
     private String lastName;
