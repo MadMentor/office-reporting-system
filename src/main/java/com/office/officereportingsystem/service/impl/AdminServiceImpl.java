@@ -7,7 +7,7 @@ import com.office.officereportingsystem.entity.User;
 import com.office.officereportingsystem.enums.Role;
 import com.office.officereportingsystem.exception.AccountNotFoundException;
 import com.office.officereportingsystem.repository.UserRepo;
-import com.office.officereportingsystem.service.SuperAdminService;
+import com.office.officereportingsystem.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,15 +20,14 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class SuperAdminServiceImpl implements SuperAdminService {
+public class AdminServiceImpl implements AdminService {
 
     private final UserRepo userRepo;
     private final PasswordEncoder passwordEncoder;
     private final AccountConverter accountConverter;
 
-
     @Override
-    public AccountUpdateRequestDto getAdminById(Integer id) throws IOException {
+    public AccountUpdateRequestDto getUserById(Integer id) throws IOException {
         User user = userRepo.findById(id)
                 .orElseThrow(() -> new AccountNotFoundException("USER_NOT_FOUND"));
 
@@ -40,9 +39,10 @@ public class SuperAdminServiceImpl implements SuperAdminService {
                 .build();
     }
 
+
     @Override
-    public List<AccountResponseDto> getAllAdmins() {
-        return userRepo.findByRole(Role.ADMIN)
+    public List<AccountResponseDto> getAllUsers() {
+        return userRepo.findByRole(Role.USER)
                 .stream()
                 .map(user -> {
                     try {

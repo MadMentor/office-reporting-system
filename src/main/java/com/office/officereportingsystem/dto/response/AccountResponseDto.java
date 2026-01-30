@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class AdminResponseDto {
+public class AccountResponseDto {
     private int id;
     private String firstName;
     private String middleName;
