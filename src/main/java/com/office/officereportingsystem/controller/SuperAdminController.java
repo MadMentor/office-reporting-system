@@ -28,10 +28,10 @@ public class SuperAdminController {
         this.accountService = accountService;
     }
 
-    @GetMapping("/dashboard")
-    public String openDashboard(Model model) {
-        return "super-admin/dashboard";
-    }
+//    @GetMapping("/dashboard")
+//    public String openDashboard(Model model) {
+//        return "super-admin/dashboard";
+//    }
 
     @GetMapping("/admin/create")
     public String openAdminFormPage(Model model) {
@@ -60,7 +60,7 @@ public class SuperAdminController {
         try {
             accountService.createAdmin(request);
             redirectAttributes.addFlashAttribute("message", "ADMIN_CREATED_SUCCESS");
-            return "redirect:/super-admin/dashboard";
+            return "redirect:/dashboard";
         } catch (UserAlreadyExistsException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
             redirectAttributes.addFlashAttribute("adminCreateRequest", request);
@@ -92,7 +92,7 @@ public class SuperAdminController {
     }
 
 
-        @GetMapping("/admin/edit/{id}")
+    @GetMapping("/admin/edit/{id}")
     public String editAdmin(@PathVariable Integer id, Model model) throws IOException {
         model.addAttribute("adminUpdateRequest", superAdminService.getAdminById(id));
         model.addAttribute("adminId", id);

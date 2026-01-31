@@ -16,10 +16,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(UserAlreadyExistsException.class)
-    public String handleUserAlreadyExistsException(
-            UserAlreadyExistsException ex,
-            Locale locale,
-            RedirectAttributes redirectAttributes) {
+    public String handleUserAlreadyExistsException(UserAlreadyExistsException ex, Locale locale,
+                                                   RedirectAttributes redirectAttributes) {
 
         String msg = messageSource.getMessage(ex.getMessage(), null, locale);
 
@@ -30,11 +28,21 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(AccountNotFoundException.class)
-    public String handleAccountNotFoundException(
-            AccountNotFoundException ex,
-            RedirectAttributes redirectAttributes) {
+    public String handleAccountNotFoundException(AccountNotFoundException ex, RedirectAttributes redirectAttributes) {
 
         redirectAttributes.addFlashAttribute("error", ex.getMessage());
         return "redirect:/super-admin/admin";
+    }
+
+    @ExceptionHandler(TaskNotFoundException.class)
+    public String handleTaskNotFoundException(TaskNotFoundException ex, RedirectAttributes redirectAttributes) {
+        redirectAttributes.addFlashAttribute("error", ex.getMessage());
+        return "redirect:/admin/task";
+    }
+
+    @ExceptionHandler(ProjectNotFoundException.class)
+    public String handleProjectNotFoundException(ProjectNotFoundException ex, RedirectAttributes redirectAttributes) {
+        redirectAttributes.addFlashAttribute("error", ex.getMessage());
+        return "redirect:/admin/project";
     }
 }

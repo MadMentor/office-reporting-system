@@ -1,10 +1,148 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>User Dashboard</title>
+    <script>
+        function confirmStatusChange(form, actionText) {
+            if (confirm('Are you sure you want to ' + actionText + ' this task?')) {
+                form.submit();
+            }
+            return false;
+        }
+    </script>
 </head>
 <body>
+<div layout:fragment="content">
+    <!-- Page header -->
+    <div class="header">
+        <h1>Welcome to Your Dashboard</h1>
+        <p>Manage your assigned tasks and track your work reports.</p>
+    </div>
 
+    <!-- Tasks Assigned Section -->
+    <div class="section">
+        <div class="section-header">
+            <h2>My Tasks</h2>
+            <a th:href="@{/task/my-task}" class="btn btn-secondary btn-sm">View My Tasks</a>
+        </div>
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Task</th>
+                <th>Project</th>
+                <th>Due Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="task, stat : ${tasks}">
+                <td th:text="${stat.count}">#</td>
+                <td th:text="${task.title}">Task Title</td>
+                <td th:text="${task.project.name}">Project Name</td>
+                <td th:text="${#temporals.format(task.dueDate, 'yyyy-MM-dd')}">Due Date</td>
+                <td>
+                    <span th:switch="${task.status}">
+                        <span th:case="'NEW'" class="badge badge-secondary" th:text="'NEW'"></span>
+                        <span th:case="'IN_PROGRESS'" class="badge badge-warning" th:text="'IN PROGRESS'"></span>
+                        <span th:case="'COMPLETED'" class="badge badge-success" th:text="'COMPLETED'"></span>
+                        <span th:case="'CANCELLED'" class="badge badge-failure">CANCELLED</span>
+                        <span th:case="'REOPENED'" class="badge badge-secondary">REOPENED</span>
+                        <span th:case="*" class="badge badge-light" th:text="${task.status}"></span>
+                    </span>
+                </td>
+                <td>
+                    <!-- Start Task -->
+                    <form th:if="${task.status.name() == 'NEW'}"
+                          th:action="@{'/task/' + ${task.id} + '/status'}"
+                          method="post"
+                          style="display:inline;">
+                        <input type="hidden" name="to" value="IN_PROGRESS"/>
+                        <button type="button"
+                                onclick="return confirmStatusChange(this.form, 'start')"
+                                class="btn btn-warning btn-sm">
+                            Start
+                        </button>
+                    </form>
+
+                    <!-- Complete Task -->
+                    <form th:if="${task.status.name() == 'IN_PROGRESS'}"
+                          th:action="@{'/task/' + ${task.id} + '/status'}"
+                          method="post"
+                          style="display:inline;">
+                        <input type="hidden" name="to" value="COMPLETED"/>
+                        <button type="button"
+                                onclick="return confirmStatusChange(this.form, 'complete')"
+                                class="btn btn-success btn-sm">
+                            Complete
+                        </button>
+                    </form>
+
+                    <!-- Report Button (always shown for active tasks) -->
+                    <a th:href="@{'/reports/create?taskId=' + ${task.id}}"
+                       th:if="${task.status.name() != 'COMPLETED'}"
+                       class="btn btn-primary btn-sm">Report</a>
+
+                    <!-- Completed Badge -->
+                    <span th:if="${task.status.name() == 'COMPLETED'}"
+                          class="badge badge-success">
+                        Completed
+                    </span>
+                </td>
+            </tr>
+            <tr th:if="${tasks.isEmpty()}">
+                <td colspan="6" class="text-center">
+                    No tasks assigned yet. <a th:href="@{/task/all-tasks}">View all tasks</a>.
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Recent Reports Section -->
+    <div class="section">
+        <div class="section-header">
+            <h2>Recent Reports</h2>
+            <a th:href="@{/reports/mine}" class="btn btn-secondary btn-sm">View All Reports</a>
+        </div>
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Date</th>
+                <th>Task</th>
+                <th>Project</th>
+                <th>Hours Worked</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="report, stat : ${reports}">
+                <td th:text="${stat.count}">#</td>
+                <td th:text="${#temporals.format(report.date, 'yyyy-MM-dd')}">Date</td>
+                <td th:text="${report.task.title}">Task Title</td>
+                <td th:text="${report.task.project.name}">Project Name</td>
+                <td th:text="${report.hoursWorked}">Hours</td>
+                <td>
+                    <a th:href="@{'/reports/view/' + ${report.id}}"
+                       class="btn btn-info btn-sm">View</a>
+                </td>
+            </tr>
+            <tr th:if="${reports.isEmpty()}">
+                <td colspan="6" class="text-center">
+                    No reports submitted yet. <a th:href="@{/reports/create}">Create your first report</a>.
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
 </body>
 </html>

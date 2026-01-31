@@ -1,28 +1,270 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
 <head>
   <meta charset="UTF-8">
-  <title>Office Reporting System</title>
-  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <title>Super Admin Dashboard</title>
 </head>
-
 <body>
 
-<header>
-  <h1>Office Reporting System (ORS)</h1>
-  <p>Manage office operations efficiently</p>
-</header>
+<div layout:fragment="content">
 
-<div th:replace="~{fragments/flash-messages :: flash}"></div>
+  <!-- Page Header -->
+  <div class="jumbotron bg-gradient-primary mb-5">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <h1 class="display-4 mb-3">
+            <i class="fas fa-crown mr-3"></i>Super Admin Dashboard
+          </h1>
+          <p class="lead mb-0">
+            Welcome!
+            Manage system administrators and oversee all operations.
+          </p>
+        </div>
+        <div class="badge badge-light text-primary p-3">
+          <i class="fas fa-shield-alt mr-2"></i>Super Admin Access
+        </div>
+      </div>
+    </div>
+  </div>
 
-<section>
-  <a th:href="@{/super-admin/admin/create}" class="btn btn-primary">
-    Create Admin
-  </a>
-  <a th:href="@{/super-admin/admin}" class="btn btn-secondary">
-    View Admins
-  </a>
-</section>
+  <!-- Flash Messages -->
+  <div th:replace="~{fragments/flash-messages :: flash}"></div>
+
+  <!-- Admin Management Section -->
+  <div class="container">
+    <div class="row mb-5">
+      <div class="col-lg-8">
+        <div class="card border-0 shadow-lg">
+          <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">
+              <i class="fas fa-user-shield mr-2"></i>Admin Management
+            </h4>
+          </div>
+          <div class="card-body p-5">
+            <div class="row">
+              <div class="col-md-6 mb-4">
+                <div class="feature-card text-center p-4 h-100">
+                  <div class="feature-icon mb-3">
+                    <i class="fas fa-user-plus fa-3x text-primary"></i>
+                  </div>
+                  <h4>Create New Admin</h4>
+                  <p class="text-muted">
+                    Create a new administrator account with specific permissions
+                    and access levels.
+                  </p>
+                  <a th:href="@{/super-admin/admin/create}"
+                     class="btn btn-primary btn-lg mt-3">
+                    <i class="fas fa-plus-circle mr-2"></i>Create Admin
+                  </a>
+                </div>
+              </div>
+
+              <div class="col-md-6 mb-4">
+                <div class="feature-card text-center p-4 h-100">
+                  <div class="feature-icon mb-3">
+                    <i class="fas fa-users fa-3x text-success"></i>
+                  </div>
+                  <h4>Manage Admins</h4>
+                  <p class="text-muted">
+                    View all administrator accounts, edit permissions,
+                    or deactivate accounts as needed.
+                  </p>
+                  <a th:href="@{/super-admin/admin}"
+                     class="btn btn-success btn-lg mt-3">
+                    <i class="fas fa-list mr-2"></i>View All Admins
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Stats Sidebar -->
+      <div class="col-lg-4">
+        <div class="card border-0 shadow-sm mb-4">
+          <div class="card-header bg-light">
+            <h5 class="mb-0">
+              <i class="fas fa-tachometer-alt mr-2"></i>Quick Stats
+            </h5>
+          </div>
+          <div class="card-body">
+            <div class="list-group list-group-flush">
+              <div class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
+                                <span>
+                                    <i class="fas fa-user-shield text-primary mr-2"></i>
+                                    Total Admins
+                                </span>
+                <span class="badge badge-primary badge-pill" th:text="${adminCount}">0</span>
+              </div>
+              <div class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
+                                <span>
+                                    <i class="fas fa-users text-info mr-2"></i>
+                                    Total Users
+                                </span>
+                <span class="badge badge-info badge-pill" th:text="${userCount}">0</span>
+              </div>
+              <div class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
+                                <span>
+                                    <i class="fas fa-project-diagram text-success mr-2"></i>
+                                    Active Projects
+                                </span>
+                <span class="badge badge-success badge-pill" th:text="${projectCount}">0</span>
+              </div>
+              <div class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
+                                <span>
+                                    <i class="fas fa-tasks text-warning mr-2"></i>
+                                    Pending Tasks
+                                </span>
+                <span class="badge badge-warning badge-pill" th:text="${pendingTaskCount}">0</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="card border-0 shadow-sm">
+          <div class="card-header bg-light">
+            <h5 class="mb-0">
+              <i class="fas fa-bolt mr-2"></i>Quick Actions
+            </h5>
+          </div>
+          <div class="card-body">
+            <div class="d-grid gap-2">
+              <a th:href="@{/admin/user}" class="btn btn-outline-primary">
+                <i class="fas fa-user-cog mr-2"></i>User Management
+              </a>
+              <a th:href="@{/admin/projects}" class="btn btn-outline-success">
+                <i class="fas fa-project-diagram mr-2"></i>Project Management
+              </a>
+              <a th:href="@{/task/all-tasks}" class="btn btn-outline-info">
+                <i class="fas fa-tasks mr-2"></i>Task Management
+              </a>
+              <a th:href="@{/reports/all-reports}" class="btn btn-outline-warning">
+                <i class="fas fa-file-alt mr-2"></i>View Reports
+              </a>
+<!--              <a th:href="@{/admin/analytics}" class="btn btn-outline-secondary">-->
+<!--                <i class="fas fa-chart-line mr-2"></i>System Analytics-->
+<!--              </a>-->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<!--    &lt;!&ndash; Recent Activity &ndash;&gt;-->
+<!--    <div class="row">-->
+<!--      <div class="col-12">-->
+<!--        <div class="card border-0 shadow">-->
+<!--          <div class="card-header bg-light">-->
+<!--            <h5 class="mb-0">-->
+<!--              <i class="fas fa-history mr-2"></i>Recent System Activity-->
+<!--            </h5>-->
+<!--          </div>-->
+<!--          <div class="card-body">-->
+<!--            <div th:if="${recentActivity != null and !recentActivity.isEmpty()}">-->
+<!--              <div class="timeline">-->
+<!--                <div th:each="activity : ${recentActivity}" class="timeline-item mb-4">-->
+<!--                  <div class="timeline-marker">-->
+<!--                    <i class="fas fa-circle" th:classappend="${activity.type == 'CREATE'} ? 'text-success' :-->
+<!--                                                                               ${activity.type == 'UPDATE'} ? 'text-warning' :-->
+<!--                                                                               ${activity.type == 'DELETE'} ? 'text-danger' : 'text-info'"></i>-->
+<!--                  </div>-->
+<!--                  <div class="timeline-content">-->
+<!--                    <h6 class="mb-1" th:text="${activity.description}">Activity Description</h6>-->
+<!--                    <small class="text-muted">-->
+<!--                      <i class="fas fa-clock mr-1"></i>-->
+<!--                      <span th:text="${#temporals.format(activity.timestamp, 'yyyy-MM-dd HH:mm')}">Timestamp</span>-->
+<!--                      by <span th:text="${activity.performedBy}">User</span>-->
+<!--                    </small>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--            <div th:if="${recentActivity == null or recentActivity.isEmpty()}" class="text-center py-4">-->
+<!--              <i class="fas fa-info-circle fa-2x text-muted mb-3"></i>-->
+<!--              <p class="text-muted">No recent activity to display</p>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+  </div>
+
+</div>
+
+<!-- Custom Styles -->
+<style th:inline="text">
+  .bg-gradient-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 0 0 20px 20px;
+  }
+
+  .feature-card {
+    background: #f8f9fa;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+  }
+
+  .feature-card:hover {
+    background: white;
+    border-color: #667eea;
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  }
+
+  .feature-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+  }
+
+  .feature-icon i {
+    color: white;
+  }
+
+  .timeline {
+    position: relative;
+    padding-left: 30px;
+  }
+
+  .timeline-item {
+    position: relative;
+  }
+
+  .timeline-marker {
+    position: absolute;
+    left: -30px;
+    top: 5px;
+  }
+
+  .timeline-content {
+    padding-left: 10px;
+  }
+
+  .btn-lg {
+    padding: 12px 30px;
+    font-weight: 500;
+  }
+
+  .card {
+    border-radius: 15px;
+  }
+
+  .card-header {
+    border-radius: 15px 15px 0 0 !important;
+    font-weight: 600;
+  }
+</style>
 
 </body>
 </html>
