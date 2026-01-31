@@ -2,33 +2,351 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Office Reporting System</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --accent-color: #f8f9fa;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 80px 0;
+            border-radius: 0 0 20px 20px;
+            margin-bottom: 60px;
+        }
+
+        .hero h1 {
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .hero .lead {
+            font-size: 1.25rem;
+            opacity: 0.9;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            height: 100%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+        }
+
+        .feature-icon i {
+            font-size: 36px;
+            color: white;
+        }
+
+        .login-section {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .btn-primary-custom {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            border: none;
+            padding: 12px 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .section-title {
+            color: #333;
+            font-weight: 700;
+            margin-bottom: 40px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            border-radius: 2px;
+        }
+
+        .text-center .section-title::after {
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        footer {
+            background: #333;
+            color: white;
+            padding: 30px 0;
+            margin-top: 60px;
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 20px;
+            margin: 0 auto 20px;
+        }
+    </style>
 </head>
 <body>
 
-<header>
-    <h1>Office Reporting System (ORS)</h1>
-    <p>Manage office operations efficiently</p>
-</header>
+<!-- Hero Section -->
+<section class="hero">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-4">
+                    <i class="fas fa-chart-line mr-3"></i>Office Reporting System
+                </h1>
+                <p class="lead">
+                    Streamline your office operations with an efficient task management and daily reporting system.
+                    Designed for teams to track work, manage projects, and improve productivity.
+                </p>
+            </div>
+            <div class="col-lg-4">
+                <div class="login-section">
+                    <h3 class="text-center mb-4">Get Started</h3>
+                    <p class="text-center text-muted mb-4">Access your account to manage tasks and reports</p>
+                    <div class="text-center">
+                        <a th:href="@{/login}" class="btn btn-primary-custom btn-lg btn-block mb-3">
+                            <i class="fas fa-sign-in-alt mr-2"></i>Login to System
+                        </a>
+                        <p class="small text-muted mt-3">
+                            Contact your administrator if you need account access
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-<main>
-    <section>
-        <h2>Welcome 👋</h2>
-        <p>
-            Office Reporting System helps manage users, roles,
-            reports, and internal office workflows securely.
-        </p>
-    </section>
+<!-- Features Section -->
+<section class="features py-5">
+    <div class="container">
+        <h2 class="section-title text-center">Key Features</h2>
 
-    <section>
-        <a th:href="@{/login}" class="btn">Login</a>
-    </section>
-</main>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <h4 class="text-center mb-3">Task Management</h4>
+                    <p class="text-center">
+                        Assign tasks to team members, track progress, and update task status from NEW to IN_PROGRESS to COMPLETED.
+                    </p>
+                </div>
+            </div>
 
+            <div class="col-md-4 mb-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <h4 class="text-center mb-3">Daily Reporting</h4>
+                    <p class="text-center">
+                        Submit daily work reports with hours worked and descriptions. Track your work history and generate productivity insights.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <h4 class="text-center mb-3">Role-Based Access</h4>
+                    <p class="text-center">
+                        Different interfaces for Super Admins, Admins, and Users with appropriate permissions and capabilities.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works -->
+<section class="how-it-works py-5 bg-light">
+    <div class="container">
+        <h2 class="section-title text-center">How It Works</h2>
+
+        <div class="row">
+            <div class="col-md-3 text-center mb-4">
+                <div class="step-number">1</div>
+                <h5>Login</h5>
+                <p class="text-muted">Access your account using secure credentials</p>
+            </div>
+
+            <div class="col-md-3 text-center mb-4">
+                <div class="step-number">2</div>
+                <h5>View Dashboard</h5>
+                <p class="text-muted">Check your assigned tasks and recent reports</p>
+            </div>
+
+            <div class="col-md-3 text-center mb-4">
+                <div class="step-number">3</div>
+                <h5>Work on Tasks</h5>
+                <p class="text-muted">Update task status and submit daily work reports</p>
+            </div>
+
+            <div class="col-md-3 text-center mb-4">
+                <div class="step-number">4</div>
+                <h5>Track Progress</h5>
+                <p class="text-muted">Monitor your productivity and work history</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- User Roles Section -->
+<section class="user-roles py-5">
+    <div class="container">
+        <h2 class="section-title text-center">User Roles</h2>
+
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <i class="fas fa-crown fa-3x text-warning"></i>
+                        </div>
+                        <h4>Super Admin</h4>
+                        <ul class="list-unstyled text-left">
+                            <li><i class="fas fa-check text-success mr-2"></i> Manage all users</li>
+                            <li><i class="fas fa-check text-success mr-2"></i> Create/Edit projects</li>
+                            <li><i class="fas fa-check text-success mr-2"></i> Assign tasks</li>
+                            <li><i class="fas fa-check text-success mr-2"></i> View all reports</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <i class="fas fa-user-tie fa-3x text-primary"></i>
+                        </div>
+                        <h4>Admin</h4>
+                        <ul class="list-unstyled text-left">
+                            <li><i class="fas fa-check text-success mr-2"></i> Manage tasks</li>
+                            <li><i class="fas fa-check text-success mr-2"></i> Create/Edit projects</li>
+                            <li><i class="fas fa-check text-success mr-2"></i> View user reports</li>
+                            <li><i class="fas fa-check text-success mr-2"></i> Assign work</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <i class="fas fa-user fa-3x text-info"></i>
+                        </div>
+                        <h4>User</h4>
+                        <ul class="list-unstyled text-left">
+                            <li><i class="fas fa-check text-success mr-2"></i> View assigned tasks</li>
+                            <li><i class="fas fa-check text-success mr-2"></i> Update task status</li>
+                            <li><i class="fas fa-check text-success mr-2"></i> Submit daily reports</li>
+                            <li><i class="fas fa-check text-success mr-2"></i> Track own work</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="cta py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 text-center">
+                <h2 class="mb-4">Ready to streamline your office workflow?</h2>
+                <p class="lead mb-4">
+                    Join the system today and experience efficient task management and reporting.
+                </p>
+                <a th:href="@{/login}" class="btn btn-primary-custom btn-lg px-5">
+                    <i class="fas fa-rocket mr-2"></i>Login Now
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
 <footer>
-    <p>© 2026 Office Reporting System</p>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h5>Office Reporting System</h5>
+                <p class="mb-0">Streamlining office operations since 2026</p>
+            </div>
+            <div class="col-md-6 text-right">
+                <p class="mb-0">&copy; 2026 Office Reporting System. All rights reserved.</p>
+                <p class="small mb-0">Version 1.0.0</p>
+            </div>
+        </div>
+    </div>
 </footer>
+
+<!-- Bootstrap & jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

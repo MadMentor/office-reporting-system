@@ -10,31 +10,26 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepo userRepo;
-    private final PasswordEncoder passwordEncoder;
+
     @Override
-    public User createUser(UserCreateRequestDtos dto) {
-        String normalizedEmail = dto.getEmail().trim().toLowerCase();
+    public List<User> getAllUsers() {
+        return userRepo.findAll();
+    }
 
-//        if (userRepo.findByEmail(normalizedEmail).isPresent()) {
-//            throw new UserAlreadyExistsException("USER_EMAIL_ALREADY_EXISTS", dto);
-//        }
+    @Override
+    public long getTotalUsersCount() {
+        return userRepo.count();
+    }
 
-        User user = User.builder()
-                .firstName(dto.getFirstName().trim())
-                .middleName(dto.getMiddleName().trim())
-                .lastName(dto.getLastName().trim())
-                .email(normalizedEmail)
-                .password(passwordEncoder.encode(dto.getPassword()))
-                .role(dto.getRole() != null ? dto.getRole() : Role.USER)
-                .createdAt(LocalDateTime.now())
-                .build();
-
-        return userRepo.save(user);
+    @Override
+    public long getAdminCount() {
+        return userRepo.countByRole(Role.ADMIN);
     }
 }

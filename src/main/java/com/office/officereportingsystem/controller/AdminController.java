@@ -28,11 +28,6 @@ public class AdminController {
         this.adminService = adminService;
     }
 
-    @GetMapping("/dashboard")
-    public String dashboard() {
-        return "admin/dashboard";
-    }
-
     @GetMapping("/user/create")
     public String openCreateUser(Model model) {
         if (!model.containsAttribute("userCreateRequest")) {
@@ -60,7 +55,7 @@ public class AdminController {
         try {
             accountService.createUser(dto);
             redirectAttributes.addFlashAttribute("message", "USER_CREATED_SUCCESS");
-            return "redirect:/admin/dashboard";
+            return "redirect:/dashboard";
         } catch (UserAlreadyExistsException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
             redirectAttributes.addFlashAttribute("userCreateRequest", dto);

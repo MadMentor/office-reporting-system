@@ -1,26 +1,84 @@
-<div th:replace="fragments/flash-messages :: flash"></div>
-<table class="table">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Email</th>
-        <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="admin : ${admins}">
-        <td th:text="${admin.id}"></td>
-        <td th:text="${admin.firstName}"></td>
-        <td th:text="${admin.lastName}"></td>
-        <td th:text="${admin.email}"></td>
-        <td>
-            <a th:href="@{/super-admin/admin/edit/{id}(id=${admin.id})}" class="btn btn-primary btn-sm">Edit</a>
-            <form th:action="@{/super-admin/admin/delete/{id}(id=${admin.id})}" method="post" style="display:inline;">
-                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-            </form>
-        </td>
-    </tr>
-    </tbody>
-</table>
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Admins</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+
+    <!-- Page Header -->
+    <div class="header d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="mb-2">
+                <i class="fas fa-user-shield mr-3 text-primary"></i>Admin Management
+            </h1>
+            <p class="text-muted mb-0">View and manage all administrators</p>
+        </div>
+        <a th:href="@{/super-admin/admin/create}" class="btn btn-primary">
+            <i class="fas fa-user-plus mr-2"></i>Add New Admin
+        </a>
+    </div>
+
+    <!-- Flash Messages -->
+    <div th:replace="fragments/flash-messages :: flash"></div>
+
+    <!-- Admins Table -->
+    <div class="card">
+        <div class="card-header bg-light">
+            <h5 class="mb-0">
+                <i class="fas fa-list mr-2"></i>All Admins
+            </h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="admin : ${admins}">
+                        <td th:text="${admin.id}"></td>
+                        <td th:text="${admin.firstName}"></td>
+                        <td th:text="${admin.lastName}"></td>
+                        <td th:text="${admin.email}"></td>
+                        <td>
+                            <a th:href="@{/super-admin/admin/edit/{id}(id=${admin.id})}" class="btn btn-warning btn-sm">
+                                <i class="fas fa-edit"></i> Edit
+                            </a>
+                            <form th:action="@{/super-admin/admin/delete/{id}(id=${admin.id})}" method="post" style="display:inline;">
+                                <button type="submit" class="btn btn-danger btn-sm"
+                                        onclick="return confirm('Are you sure you want to delete this admin?')">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr th:if="${admins == null or admins.isEmpty()}">
+                        <td colspan="5" class="text-center py-4">
+                            <i class="fas fa-user-shield fa-2x text-muted mb-3"></i>
+                            <h5 class="text-muted">No admins found</h5>
+                            <a th:href="@{/super-admin/admin/create}" class="btn btn-primary">
+                                <i class="fas fa-user-plus mr-2"></i>Add First Admin
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

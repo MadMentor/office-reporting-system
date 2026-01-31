@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Daily Report</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+
+    <!-- Page Header -->
+    <div class="header mb-4">
+        <h1 class="mb-2">
+            <i class="fas fa-file-alt mr-3 text-primary"></i>Create Daily Report
+        </h1>
+        <p class="text-muted">Log your daily work hours and progress</p>
+    </div>
+
+    <!-- Flash Messages -->
+    <div th:replace="fragments/flash-messages :: flash"></div>
+
+    <!-- Create Daily Report Form -->
+    <div class="card">
+        <div class="card-body">
+            <form th:action="@{/reports/create}"
+                  th:object="${dailyReportRequest}"
+                  method="post">
+
+                <!-- Task Selection -->
+                <div class="form-group">
+                    <label for="taskId">Task *</label>
+                    <select id="taskId"
+                            th:field="*{taskId}"
+                            class="form-control"
+                            required>
+                        <option value="">Select a task</option>
+                        <option th:each="t : ${tasks}"
+                                th:value="${t.id}"
+                                th:text="${t.title + ' (' + t.project.name + ')'}">
+                        </option>
+                    </select>
+                    <div class="text-danger small"
+                         th:if="${#fields.hasErrors('taskId')}"
+                         th:errors="*{taskId}">
+                    </div>
+                </div>
+
+                <!-- Date -->
+                <div class="form-group">
+                    <label for="date">Date *</label>
+                    <input type="date"
+                           id="date"
+                           th:field="*{date}"
+                           class="form-control"
+                           required>
+                    <div class="text-danger small"
+                         th:if="${#fields.hasErrors('date')}"
+                         th:errors="*{date}">
+                    </div>
+                </div>
+
+                <!-- Work Description -->
+                <div class="form-group">
+                    <label for="description">Work Description *</label>
+                    <textarea id="description"
+                              th:field="*{description}"
+                              class="form-control"
+                              rows="3"
+                              required>
+                    </textarea>
+                    <div class="text-danger small"
+                         th:if="${#fields.hasErrors('description')}"
+                         th:errors="*{description}">
+                    </div>
+                </div>
+
+                <!-- Hours Worked -->
+                <div class="form-group">
+                    <label for="hoursWorked">Hours Worked *</label>
+                    <input type="number"
+                           step="0.1"
+                           id="hoursWorked"
+                           th:field="*{hoursWorked}"
+                           class="form-control"
+                           min="0.1"
+                           max="24"
+                           required>
+                    <div class="text-danger small"
+                         th:if="${#fields.hasErrors('hoursWorked')}"
+                         th:errors="*{hoursWorked}">
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="form-actions mt-4">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save mr-2"></i>Submit Report
+                    </button>
+                    <a th:href="@{/reports/mine}" class="btn btn-secondary">
+                        <i class="fas fa-times mr-2"></i>Cancel
+                    </a>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,28 +1,283 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Office Reporting System</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <title>Admin Dashboard</title>
 </head>
-
 <body>
 
-<header>
-    <h1>Office Reporting System (ORS)</h1>
-    <p>Manage office operations efficiently</p>
-</header>
+<div layout:fragment="content">
 
-<div th:replace="~{fragments/flash-messages :: flash}"></div>
+    <!-- Page Header -->
+    <div class="header mb-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1 class="display-4 mb-2">
+                    <i class="fas fa-crown text-warning mr-3"></i>Admin Dashboard
+                </h1>
+                <p class="lead text-muted">
+                    Welcome back!
+                    Manage all system operations from here.
+                </p>
+            </div>
+            <div class="badge badge-warning p-3">
+                <i class="fas fa-shield-alt mr-2"></i> Admin Access
+            </div>
+        </div>
+    </div>
 
-<section>
-    <a th:href="@{/admin/user/create}" class="btn btn-primary">
-        Create User
-    </a>
-    <a th:href="@{/admin/user}" class="btn btn-secondary">
-        View Users
-    </a>
-</section>
+    <!-- Flash Messages -->
+    <div th:replace="~{fragments/flash-messages :: flash}"></div>
+
+    <!-- Quick Stats -->
+    <div class="row mb-5">
+        <div class="col-md-3 mb-4">
+            <div class="card border-left-primary h-100 border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="mr-3">
+                            <i class="fas fa-users fa-3x text-primary"></i>
+                        </div>
+                        <div>
+                            <h5 class="card-title text-muted mb-1">Total Users</h5>
+                            <h2 class="mb-0" th:text="${userCount}">0</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-4">
+            <div class="card border-left-success h-100 border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="mr-3">
+                            <i class="fas fa-project-diagram fa-3x text-success"></i>
+                        </div>
+                        <div>
+                            <h5 class="card-title text-muted mb-1">Active Projects</h5>
+                            <h2 class="mb-0" th:text="${projectCount}">0</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-4">
+            <div class="card border-left-info h-100 border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="mr-3">
+                            <i class="fas fa-tasks fa-3x text-info"></i>
+                        </div>
+                        <div>
+                            <h5 class="card-title text-muted mb-1">Total Tasks</h5>
+                            <h2 class="mb-0" th:text="${taskCount}">0</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-4">
+            <div class="card border-left-warning h-100 border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="mr-3">
+                            <i class="fas fa-file-alt fa-3x text-warning"></i>
+                        </div>
+                        <div>
+                            <h5 class="card-title text-muted mb-1">Today's Reports</h5>
+                            <h2 class="mb-0" th:text="${reportCount}">0</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Management Actions -->
+    <div class="row">
+        <!-- User Management -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100 border-0 shadow">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-users mr-2"></i>User Management
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text mb-4">
+                        Create and manage user accounts, assign roles, and monitor user activities.
+                    </p>
+                    <div class="d-grid gap-2">
+                        <a th:href="@{/admin/user/create}" class="btn btn-primary btn-lg">
+                            <i class="fas fa-user-plus mr-2"></i>Create New User
+                        </a>
+                        <a th:href="@{/admin/user}" class="btn btn-outline-primary btn-lg">
+                            <i class="fas fa-list mr-2"></i>View All Users
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Project Management -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100 border-0 shadow">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-project-diagram mr-2"></i>Project Management
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text mb-4">
+                        Create projects, assign team members, and track project progress and timelines.
+                    </p>
+                    <div class="d-grid gap-2">
+                        <a th:href="@{/admin/project/create}" class="btn btn-success btn-lg">
+                            <i class="fas fa-plus-circle mr-2"></i>Create New Project
+                        </a>
+                        <a th:href="@{/admin/projects}" class="btn btn-outline-success btn-lg">
+                            <i class="fas fa-list mr-2"></i>View All Projects
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Task Management -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100 border-0 shadow">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-tasks mr-2"></i>Task Management
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text mb-4">
+                        Create tasks, assign them to team members, and monitor task completion status.
+                    </p>
+                    <div class="d-grid gap-2">
+                        <a th:href="@{/task/create}" class="btn btn-info btn-lg">
+                            <i class="fas fa-plus mr-2"></i>Create New Task
+                        </a>
+                        <a th:href="@{/task/all-tasks}" class="btn btn-outline-info btn-lg">
+                            <i class="fas fa-list mr-2"></i>View All Tasks
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reports & Analytics -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100 border-0 shadow">
+                <div class="card-header bg-warning text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-chart-bar mr-2"></i>Reports & Analytics
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text mb-4">
+                        View daily reports, generate productivity analytics, and export data for review.
+                    </p>
+                    <div class="d-grid gap-2">
+                        <a th:href="@{/admin/reports}" class="btn btn-warning btn-lg">
+                            <i class="fas fa-file-alt mr-2"></i>View All Reports
+                        </a>
+                        <a th:href="@{/admin/analytics}" class="btn btn-outline-warning btn-lg">
+                            <i class="fas fa-chart-line mr-2"></i>View Analytics
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="card border-0 shadow mt-4">
+        <div class="card-header bg-light">
+            <h5 class="mb-0">
+                <i class="fas fa-bolt mr-2"></i>Quick Actions
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3 mb-3">
+                    <a th:href="@{/admin/user}" class="btn btn-outline-secondary btn-block">
+                        <i class="fas fa-user-edit mr-2"></i>Edit Users
+                    </a>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <a th:href="@{/task}" class="btn btn-outline-secondary btn-block">
+                        <i class="fas fa-tasks mr-2"></i>Manage Tasks
+                    </a>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <a th:href="@{/reports/all}" class="btn btn-outline-secondary btn-block">
+                        <i class="fas fa-file-download mr-2"></i>Export Reports
+                    </a>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <a th:href="@{/admin/settings}" class="btn btn-outline-secondary btn-block">
+                        <i class="fas fa-cog mr-2"></i>System Settings
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Add some custom styles -->
+<style th:inline="text">
+    .header {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        padding: 40px;
+        border-radius: 15px;
+        margin-top: 20px;
+    }
+
+    .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 15px;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.1) !important;
+    }
+
+    .card-header {
+        border-radius: 15px 15px 0 0 !important;
+        border: none;
+        font-weight: 600;
+    }
+
+    .border-left-primary {
+        border-left: 4px solid #667eea !important;
+    }
+
+    .border-left-success {
+        border-left: 4px solid #10b981 !important;
+    }
+
+    .border-left-info {
+        border-left: 4px solid #3b82f6 !important;
+    }
+
+    .border-left-warning {
+        border-left: 4px solid #f59e0b !important;
+    }
+
+    .btn-lg {
+        padding: 12px 24px;
+        font-size: 16px;
+    }
+</style>
 
 </body>
 </html>
