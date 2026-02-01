@@ -1,14 +1,20 @@
 package com.office.officereportingsystem.exception;
 
-public class AccountNotFoundException extends RuntimeException {
+public class AccountNotFoundException extends ApplicationException {
 
-    private final String messageCode;
+    private final Object data;
 
-    public AccountNotFoundException(String messageCode) {
-        super(messageCode);
-        this.messageCode = messageCode;
+    public AccountNotFoundException() {
+        super("ACCOUNT_NOT_FOUND");
+        this.data = null;
     }
-    public String getMessageCode() {
-        return messageCode;
+
+    public AccountNotFoundException(Object account) {
+        super("ACCOUNT_NOT_FOUND");
+        this.data = account;
+    }
+
+    public Object getData() {
+        return data;
     }
 }

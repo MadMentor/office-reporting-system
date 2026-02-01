@@ -15,34 +15,91 @@ public class GlobalExceptionHandler {
         this.messageSource = messageSource;
     }
 
-    @ExceptionHandler(UserAlreadyExistsException.class)
-    public String handleUserAlreadyExistsException(UserAlreadyExistsException ex, Locale locale,
+    @ExceptionHandler(EmailAlreadyExistsException.class)
+    public String handleEmailAlreadyExistsException(EmailAlreadyExistsException ex,
+                                                   Locale locale,
                                                    RedirectAttributes redirectAttributes) {
 
-        String msg = messageSource.getMessage(ex.getMessage(), null, locale);
+        addErrorFlash(ex, locale, redirectAttributes);
 
-        redirectAttributes.addFlashAttribute("error", msg);
-        redirectAttributes.addFlashAttribute("adminCreateRequest", ex.getAdminData());
+        if (ex.getData() != null) {
+            redirectAttributes.addFlashAttribute("adminCreateRequest", ex.getData());
+        }
 
         return "redirect:/super-admin/admin/create";
     }
 
     @ExceptionHandler(AccountNotFoundException.class)
-    public String handleAccountNotFoundException(AccountNotFoundException ex, RedirectAttributes redirectAttributes) {
+    public String handleAccountNotFoundException(AccountNotFoundException ex,
+                                                 Locale locale,
+                                                 RedirectAttributes redirectAttributes) {
 
-        redirectAttributes.addFlashAttribute("error", ex.getMessage());
+        addErrorFlash(ex, locale, redirectAttributes);
+        if (ex.getData() != null) {
+            redirectAttributes.addFlashAttribute("accountRequest", ex.getData());
+        }
         return "redirect:/super-admin/admin";
     }
 
     @ExceptionHandler(TaskNotFoundException.class)
-    public String handleTaskNotFoundException(TaskNotFoundException ex, RedirectAttributes redirectAttributes) {
-        redirectAttributes.addFlashAttribute("error", ex.getMessage());
+    public String handleTaskNotFoundException(TaskNotFoundException ex,
+                                              Locale locale,
+                                              RedirectAttributes redirectAttributes) {
+        addErrorFlash(ex, locale, redirectAttributes);
+        if (ex.getData() != null) {
+            redirectAttributes.addFlashAttribute("taskRequest", ex.getData());
+        }
         return "redirect:/admin/task";
     }
 
     @ExceptionHandler(ProjectNotFoundException.class)
-    public String handleProjectNotFoundException(ProjectNotFoundException ex, RedirectAttributes redirectAttributes) {
-        redirectAttributes.addFlashAttribute("error", ex.getMessage());
+    public String handleProjectNotFoundException(ProjectNotFoundException ex,
+                                                 Locale locale,
+                                                 RedirectAttributes redirectAttributes) {
+        addErrorFlash(ex, locale, redirectAttributes);
+        if (ex.getData() != null) {
+            redirectAttributes.addFlashAttribute("projectRequest", ex.getData());
+        }
         return "redirect:/admin/project";
+    }
+
+    @ExceptionHandler(CannotDeleteSuperAdminException.class)
+    public String handleCannotDeleteSuperAdminException(CannotDeleteSuperAdminException ex,
+                                                       Locale locale,
+                                                       RedirectAttributes redirectAttributes) {
+        addErrorFlash(ex, locale, redirectAttributes);
+        if (ex.getData() != null) {
+            redirectAttributes.addFlashAttribute("deleteSuperAdminRequest", ex.getData());
+        }
+        return "redirect:/super-admin/admin";
+    }
+
+    @ExceptionHandler(CannotDeleteSelfException.class)
+    public String handleCannotDeleteSelfException(CannotDeleteSelfException ex,
+                                                  Locale locale,
+                                                  RedirectAttributes redirectAttributes) {
+        addErrorFlash(ex, locale, redirectAttributes);
+        if (ex.getData() != null) {
+            redirectAttributes.addFlashAttribute("deleteSelfRequest", ex.getData());
+        }
+        return "redirect:/admin/user";
+    }
+
+    @ExceptionHandler(CannotDeleteAdminException.class)
+    public String handleCannotDeleteAdminException(CannotDeleteAdminException ex,
+                                                   Locale locale,
+                                                   RedirectAttributes redirectAttributes) {
+        addErrorFlash(ex, locale, redirectAttributes);
+        if (ex.getData() != null) {
+            redirectAttributes.addFlashAttribute("deleteAdminRequest", ex.getData());
+        }
+        return "redirect:/admin/user";
+    }
+
+    private void addErrorFlash(ApplicationException ex,
+                               Locale locale,
+                               RedirectAttributes redirectAttributes) {
+        String msg = messageSource.getMessage(ex.getMessage(), ex.getArgs(), locale);
+        redirectAttributes.addFlashAttribute("error", msg);
     }
 }

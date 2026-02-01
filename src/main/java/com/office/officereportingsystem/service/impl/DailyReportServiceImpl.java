@@ -40,7 +40,7 @@ public class DailyReportServiceImpl implements DailyReportService {
                 .orElseThrow(() -> new TaskNotFoundException("TASK_NOT_FOUND"));
 
         Project project = projectRepo.findById(task.getProject().getId())
-                .orElseThrow(() -> new ProjectNotFoundException("PROJECT_NOT_FOUND"));
+                .orElseThrow(() -> new ProjectNotFoundException());
 
         DailyReport dailyReport = DailyReport.builder()
                 .user(user)

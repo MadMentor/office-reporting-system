@@ -60,7 +60,7 @@ public class ProjectServiceImpl implements ProjectService {
     public void updateProject(Integer projectId, ProjectUpdateRequestDto dto) {
 
         Project project = projectRepo.findById(projectId)
-                .orElseThrow(() -> new ProjectNotFoundException("PROJECT_NOT_FOUND"));
+                .orElseThrow(() -> new ProjectNotFoundException());
 
         project.setName(dto.getProjectName());
         project.setDescription(dto.getDescription());
@@ -73,7 +73,7 @@ public class ProjectServiceImpl implements ProjectService {
     public void deleteProject(Integer projectId) {
 
         Project project = projectRepo.findById(projectId)
-                .orElseThrow(() -> new ProjectNotFoundException("PROJECT_NOT_FOUND"));
+                .orElseThrow(() -> new ProjectNotFoundException());
 
         if (!project.getTasks().isEmpty()) {
             throw new IllegalStateException("PROJECT_HAS_ACTIVE_TASKS");
