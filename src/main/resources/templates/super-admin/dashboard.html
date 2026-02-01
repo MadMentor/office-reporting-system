@@ -30,9 +30,6 @@
     </div>
   </div>
 
-  <!-- Flash Messages -->
-  <div th:replace="~{fragments/flash-messages :: flash}"></div>
-
   <!-- Admin Management Section -->
   <div class="container">
     <div class="row mb-5">
@@ -154,44 +151,6 @@
         </div>
       </div>
     </div>
-
-<!--    &lt;!&ndash; Recent Activity &ndash;&gt;-->
-<!--    <div class="row">-->
-<!--      <div class="col-12">-->
-<!--        <div class="card border-0 shadow">-->
-<!--          <div class="card-header bg-light">-->
-<!--            <h5 class="mb-0">-->
-<!--              <i class="fas fa-history mr-2"></i>Recent System Activity-->
-<!--            </h5>-->
-<!--          </div>-->
-<!--          <div class="card-body">-->
-<!--            <div th:if="${recentActivity != null and !recentActivity.isEmpty()}">-->
-<!--              <div class="timeline">-->
-<!--                <div th:each="activity : ${recentActivity}" class="timeline-item mb-4">-->
-<!--                  <div class="timeline-marker">-->
-<!--                    <i class="fas fa-circle" th:classappend="${activity.type == 'CREATE'} ? 'text-success' :-->
-<!--                                                                               ${activity.type == 'UPDATE'} ? 'text-warning' :-->
-<!--                                                                               ${activity.type == 'DELETE'} ? 'text-danger' : 'text-info'"></i>-->
-<!--                  </div>-->
-<!--                  <div class="timeline-content">-->
-<!--                    <h6 class="mb-1" th:text="${activity.description}">Activity Description</h6>-->
-<!--                    <small class="text-muted">-->
-<!--                      <i class="fas fa-clock mr-1"></i>-->
-<!--                      <span th:text="${#temporals.format(activity.timestamp, 'yyyy-MM-dd HH:mm')}">Timestamp</span>-->
-<!--                      by <span th:text="${activity.performedBy}">User</span>-->
-<!--                    </small>-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--            <div th:if="${recentActivity == null or recentActivity.isEmpty()}" class="text-center py-4">-->
-<!--              <i class="fas fa-info-circle fa-2x text-muted mb-3"></i>-->
-<!--              <p class="text-muted">No recent activity to display</p>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
   </div>
 
 </div>
