@@ -8,6 +8,10 @@
 </head>
 <body>
 
+<th:block layout:fragment="page-css">
+  <link rel="stylesheet" th:href="@{/css/super-admin-dashboard.css}">
+</th:block>
+
 <div layout:fragment="content">
 
   <!-- Page Header -->
@@ -154,76 +158,6 @@
   </div>
 
 </div>
-
-<!-- Custom Styles -->
-<style th:inline="text">
-  .bg-gradient-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 0 0 20px 20px;
-  }
-
-  .feature-card {
-    background: #f8f9fa;
-    border-radius: 15px;
-    transition: all 0.3s ease;
-    border: 2px solid transparent;
-  }
-
-  .feature-card:hover {
-    background: white;
-    border-color: #667eea;
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-  }
-
-  .feature-icon {
-    width: 80px;
-    height: 80px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 20px;
-  }
-
-  .feature-icon i {
-    color: white;
-  }
-
-  .timeline {
-    position: relative;
-    padding-left: 30px;
-  }
-
-  .timeline-item {
-    position: relative;
-  }
-
-  .timeline-marker {
-    position: absolute;
-    left: -30px;
-    top: 5px;
-  }
-
-  .timeline-content {
-    padding-left: 10px;
-  }
-
-  .btn-lg {
-    padding: 12px 30px;
-    font-weight: 500;
-  }
-
-  .card {
-    border-radius: 15px;
-  }
-
-  .card-header {
-    border-radius: 15px 15px 0 0 !important;
-    font-weight: 600;
-  }
-</style>
 
 </body>
 </html>

@@ -13,24 +13,6 @@
     <!-- Error message -->
     <div th:if="${error}" class="flash-message error" th:text="#{${error}}"></div>
 
-
-    <style>
-        .flash-message {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 25px;
-            border-radius: 5px;
-            color: #fff;
-            font-weight: bold;
-            z-index: 9999;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-        }
-
-        .flash-message.success { background-color: #28a745; }
-        .flash-message.error { background-color: #dc3545; }
-    </style>
-
     <script>
         window.addEventListener('DOMContentLoaded', () => {
             const messages = document.querySelectorAll('.flash-message');
