@@ -1,7 +1,20 @@
 package com.office.officereportingsystem.exception;
 
-public class AuthenticationFailedException extends RuntimeException{
-    public AuthenticationFailedException(String messageCode) {
-        super(messageCode);
+public class AuthenticationFailedException extends ApplicationException{
+
+    private final Object data;
+
+    public AuthenticationFailedException() {
+        super("AUTHENTICATION_FAILED");
+        this.data = null;
+    }
+
+    public AuthenticationFailedException(Object data) {
+        super("AUTHENTICATION_FAILED");
+        this.data = data;
+    }
+
+    public Object getData() {
+        return data;
     }
 }

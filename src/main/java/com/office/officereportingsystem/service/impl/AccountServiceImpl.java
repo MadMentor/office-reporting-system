@@ -5,8 +5,7 @@ import com.office.officereportingsystem.dto.request.AccountCreateRequestDto;
 import com.office.officereportingsystem.dto.request.AccountUpdateRequestDto;
 import com.office.officereportingsystem.entity.User;
 import com.office.officereportingsystem.enums.Role;
-import com.office.officereportingsystem.exception.AccountNotFoundException;
-import com.office.officereportingsystem.exception.UserAlreadyExistsException;
+import com.office.officereportingsystem.exception.*;
 import com.office.officereportingsystem.repository.UserRepo;
 import com.office.officereportingsystem.service.AccountService;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +39,7 @@ public class AccountServiceImpl implements AccountService {
 
         String normalizedEmail = dto.getEmail().trim().toLowerCase();
         if (userRepo.findByEmail(normalizedEmail).isPresent()) {
-            throw new UserAlreadyExistsException("USER_EMAIL_ALREADY_EXISTS", dto);
+            throw new EmailAlreadyExistsException(dto);
         }
 
         User user = User.builder()
@@ -64,7 +63,7 @@ public class AccountServiceImpl implements AccountService {
 
         if (!user.getEmail().equalsIgnoreCase(dto.getEmail())) {
             userRepo.findByEmail(dto.getEmail().trim().toLowerCase()).ifPresent(existingUser -> {
-                throw new UserAlreadyExistsException("USER_EMAIL_ALREADY_EXISTS", dto);
+                throw new EmailAlreadyExistsException(dto);
             });
             user.setEmail(dto.getEmail().trim().toLowerCase());
         }
@@ -80,22 +79,25 @@ public class AccountServiceImpl implements AccountService {
     public void deleteAccount(Integer targetUserId, String currentUserEmail) {
         // Fetch the user who is currently logged in
         User currentUser = userRepo.findByEmail(currentUserEmail)
-                .orElseThrow(() -> new AccountNotFoundException("CURRENT_USER_NOT_FOUND"));
+                .orElseThrow(() -> new AccountNotFoundException());
 
         // Fetch the user to be deleted
         User targetUser = userRepo.findById(targetUserId)
-                .orElseThrow(() -> new AccountNotFoundException("USER_NOT_FOUND"));
+                .orElseThrow(() -> new AccountNotFoundException());
 
-        // Prevent deleting superadmin
+        // Prevent deleting super-admin
         if (targetUser.getRole() == Role.SUPER_ADMIN) {
-            throw new IllegalArgumentException("CANNOT_DELETE_SUPERADMIN");
+            throw new CannotDeleteSuperAdminException();
         }
 
         // Prevent admin from deleting themselves
         if (currentUser.getId().equals(targetUserId)) {
-            throw new IllegalArgumentException("CANNOT_DELETE_SELF");
+            throw new CannotDeleteSelfException();
         }
 
+        if (currentUser.getRole() == Role.ADMIN && targetUser.getRole() == Role.ADMIN) {
+            throw new CannotDeleteAdminException();
+        }
         // If all checks pass, delete the target user
         userRepo.deleteById(targetUserId);
     }

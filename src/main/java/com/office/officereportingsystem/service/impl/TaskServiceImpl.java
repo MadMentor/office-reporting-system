@@ -8,6 +8,7 @@ import com.office.officereportingsystem.entity.Task;
 import com.office.officereportingsystem.entity.User;
 import com.office.officereportingsystem.enums.Role;
 import com.office.officereportingsystem.exception.AccountNotFoundException;
+import com.office.officereportingsystem.exception.ProjectNotFoundException;
 import com.office.officereportingsystem.exception.TaskNotFoundException;
 import com.office.officereportingsystem.repository.ProjectRepo;
 import com.office.officereportingsystem.repository.TaskRepo;
@@ -32,16 +33,13 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public void createTask(TaskCreateRequestDto dto, String currentAdmin) {
-        User assignedTo = userRepo.findById(dto.getAssignedToId())
-                .orElseThrow(() -> new AccountNotFoundException("USER_NOT_FOUND"));
+        User assignedTo = getUserById(dto.getAssignedToId());
 
-        User admin = userRepo.findByEmail(currentAdmin)
-                .orElseThrow(() -> new AccountNotFoundException("ACCOUNT_NOT_FOUND"));
+        User admin = getUserByEmail(currentAdmin);
 
         Project project = null;
         if (dto.getProjectId() != null) {
-            project = projectRepo.findById(dto.getProjectId())
-                    .orElseThrow(() -> new RuntimeException("PROJECT_NOT_FOUND"));
+            project = getProjectById(dto.getProjectId());
         }
 
         Task task = Task.builder()
@@ -56,13 +54,12 @@ public class TaskServiceImpl implements TaskService {
                 .status(TaskStatus.NEW)
                 .build();
 
-        Task savedTask = taskRepo.save(task);
+        taskRepo.save(task);
     }
 
     @Override
     public TaskResponseDto getTaskById(Integer id) {
-        Task task =  taskRepo.findById(id)
-                .orElseThrow(() -> new TaskNotFoundException("TASK_NOT_FOUND"));
+        Task task =  getTaskEntityById(id);
 
         return TaskResponseDto.builder()
                 .id(task.getId())
@@ -75,8 +72,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public TaskUpdateRequestDto getTaskUpdateRequestById(Integer id) {
-        Task task =  taskRepo.findById(id)
-                .orElseThrow(() -> new TaskNotFoundException("TASK_NOT_FOUND"));
+        Task task =  getTaskEntityById(id);
 
         return TaskUpdateRequestDto.builder()
                 .title(task.getTitle())
@@ -90,8 +86,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<Task> getTasksAssignedToUser(String email) {
-        User user = userRepo.findByEmail(email)
-                .orElseThrow(() -> new AccountNotFoundException("USER_NOT_FOUND"));
+        User user = getUserByEmail(email);
 
         return taskRepo.findByAssignedTo(user);
     }
@@ -103,20 +98,17 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public void updateTask(Integer taskId, TaskUpdateRequestDto dto, String currentAdmin) {
-        Task task = taskRepo.findById(taskId)
-                .orElseThrow(() -> new RuntimeException("TASK_NOT_FOUND"));
+        Task task = getTaskEntityById(taskId);
 
-        User assignedTo = userRepo.findById(dto.getAssignedToId())
-                .orElseThrow(() -> new RuntimeException("USER_NOT_FOUND"));
+        User assignedTo = getUserById(dto.getAssignedToId());
 
         Project project = null;
         if (dto.getProjectId() != null) {
-            project = projectRepo.findById(dto.getProjectId())
-                    .orElseThrow(() -> new RuntimeException("PROJECT_NOT_FOUND"));
+            project = getProjectById(dto.getProjectId());
         }
 
-        User admin = userRepo.findByEmail(currentAdmin)
-                .orElseThrow(() -> new AccountNotFoundException("USER_NOT_FOUND"));
+        User admin = getUserByEmail(currentAdmin);
+
         task.setTitle(dto.getTitle());
         task.setDescription(dto.getDescription());
         task.setProject(project);
@@ -130,18 +122,15 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public void deleteTask(Integer taskId, String currentAdmin) {
-        Task task = taskRepo.findById(taskId)
-                .orElseThrow(() -> new RuntimeException("TASK_NOT_FOUND"));
+        Task task = getTaskEntityById(taskId);
         taskRepo.delete(task);
     }
 
     @Override
     public void changeTaskStatus(Integer taskId, String username, TaskStatus newStatus) {
-        Task task = taskRepo.findById(taskId)
-                .orElseThrow(() -> new IllegalArgumentException("TASK_NOT_FOUND"));
+        Task task = getTaskEntityById(taskId);
         
-        User currentUser = userRepo.findByEmail(username)
-                .orElseThrow(() -> new AccountNotFoundException("USER_NOT_FOUND"));
+        User currentUser = getUserByEmail(username);
         
         TaskStatus currentStatus = task.getStatus();
         
@@ -179,4 +168,25 @@ public class TaskServiceImpl implements TaskService {
     public long getTotalTaskCount() {
         return taskRepo.count();
     }
+
+    private Task getTaskEntityById(Integer id) {
+        return taskRepo.findById(id)
+                .orElseThrow(TaskNotFoundException::new);
+    }
+
+    private User getUserById(Integer id) {
+        return userRepo.findById(id)
+                .orElseThrow(AccountNotFoundException::new);
+    }
+
+    private User getUserByEmail(String email) {
+        return userRepo.findByEmail(email)
+                .orElseThrow(AccountNotFoundException::new);
+    }
+
+    private Project getProjectById(Integer id) {
+        return projectRepo.findById(id)
+                .orElseThrow(ProjectNotFoundException::new);
+    }
+
 }

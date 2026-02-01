@@ -1,14 +1,20 @@
 package com.office.officereportingsystem.exception;
 
-public class TaskNotFoundException extends RuntimeException{
+public class TaskNotFoundException extends ApplicationException{
 
-    private final String messageCode;
+    private final Object data;
 
-    public TaskNotFoundException(String messageCode) {
-        super(messageCode);
-        this.messageCode = messageCode;
+    public TaskNotFoundException() {
+        super("TASK_NOT_FOUND");
+        this.data = null;
     }
-    public String getMessageCode() {
-        return messageCode;
+
+    public TaskNotFoundException(Object task) {
+        super("TASK_NOT_FOUND");
+        this.data = task;
+    }
+
+    public Object getData() {
+        return data;
     }
 }

@@ -3,7 +3,7 @@ package com.office.officereportingsystem.controller;
 import com.office.officereportingsystem.dto.request.AccountCreateRequestDto;
 import com.office.officereportingsystem.dto.request.AccountUpdateRequestDto;
 import com.office.officereportingsystem.exception.AccountNotFoundException;
-import com.office.officereportingsystem.exception.UserAlreadyExistsException;
+import com.office.officereportingsystem.exception.EmailAlreadyExistsException;
 import com.office.officereportingsystem.service.AccountService;
 import com.office.officereportingsystem.service.SuperAdminService;
 import jakarta.validation.Valid;
@@ -61,7 +61,7 @@ public class SuperAdminController {
             accountService.createAdmin(request);
             redirectAttributes.addFlashAttribute("message", "ADMIN_CREATED_SUCCESS");
             return "redirect:/dashboard";
-        } catch (UserAlreadyExistsException e) {
+        } catch (EmailAlreadyExistsException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
             redirectAttributes.addFlashAttribute("adminCreateRequest", request);
             return "redirect:/super-admin/admin/create";
@@ -116,9 +116,9 @@ public class SuperAdminController {
             accountService.updateAccount(adminId, dto);
             redirectAttributes.addFlashAttribute("message", "ADMIN_UPDATED_SUCCESS");
             return "redirect:/super-admin/admin";
-        } catch (UserAlreadyExistsException e) {
+        } catch (EmailAlreadyExistsException e) {
             model.addAttribute("adminId", adminId);
-            model.addAttribute("adminUpdateRequest", e.getAdminData());
+            model.addAttribute("adminUpdateRequest", e.getData());
             model.addAttribute("error", e.getMessage());
             return "super-admin/update-admin";
         } catch (AccountNotFoundException e) {

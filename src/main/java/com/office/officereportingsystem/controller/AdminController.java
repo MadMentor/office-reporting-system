@@ -3,10 +3,15 @@ package com.office.officereportingsystem.controller;
 import com.office.officereportingsystem.dto.request.AccountCreateRequestDto;
 import com.office.officereportingsystem.dto.request.AccountUpdateRequestDto;
 import com.office.officereportingsystem.exception.AccountNotFoundException;
-import com.office.officereportingsystem.exception.UserAlreadyExistsException;
+import com.office.officereportingsystem.exception.ApplicationException;
+import com.office.officereportingsystem.exception.EmailAlreadyExistsException;
 import com.office.officereportingsystem.service.AccountService;
 import com.office.officereportingsystem.service.AdminService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,18 +20,16 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.Locale;
 
 @Controller
 @RequestMapping("/admin")
+@RequiredArgsConstructor
 public class AdminController {
 
     private final AccountService accountService;
     private final AdminService adminService;
-
-    public AdminController(AccountService accountService, AdminService adminService) {
-        this.accountService = accountService;
-        this.adminService = adminService;
-    }
+    private final MessageSource messageSource;
 
     @GetMapping("/user/create")
     public String openCreateUser(Model model) {
@@ -56,7 +59,7 @@ public class AdminController {
             accountService.createUser(dto);
             redirectAttributes.addFlashAttribute("message", "USER_CREATED_SUCCESS");
             return "redirect:/dashboard";
-        } catch (UserAlreadyExistsException e) {
+        } catch (EmailAlreadyExistsException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
             redirectAttributes.addFlashAttribute("userCreateRequest", dto);
             return "redirect:/admin/user/create";
@@ -74,14 +77,10 @@ public class AdminController {
             @PathVariable Integer id,
             RedirectAttributes redirectAttributes,
             Principal principal) {
-        try {
-            accountService.deleteAccount(id, principal.getName());
-            redirectAttributes.addFlashAttribute("message", "USER_DELETED_SUCCESS");
-        } catch (IllegalArgumentException e) {
-            redirectAttributes.addFlashAttribute("error", e.getMessage());
-        } catch (AccountNotFoundException e) {
-            redirectAttributes.addFlashAttribute("error", e.getMessage());
-        }
+        accountService.deleteAccount(id, principal.getName());
+
+        redirectAttributes.addFlashAttribute("message",
+                messageSource.getMessage("USER_DELETED_SUCCESS", null, LocaleContextHolder.getLocale()));
         return "redirect:/admin/user";
     }
 
@@ -110,9 +109,9 @@ public class AdminController {
             accountService.updateAccount(userId, dto);
             redirectAttributes.addFlashAttribute("message", "USER_UPDATED_SUCCESS");
             return "redirect:/admin/user";
-        } catch (UserAlreadyExistsException e) {
+        } catch (EmailAlreadyExistsException e) {
             model.addAttribute("userId", userId);
-            model.addAttribute("adminUpdateRequest", e.getAdminData());
+            model.addAttribute("adminUpdateRequest", e.getData());
             model.addAttribute("error", e.getMessage());
             return "super-admin/update-admin";
         } catch (AccountNotFoundException e) {

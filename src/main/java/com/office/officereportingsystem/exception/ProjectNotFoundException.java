@@ -1,15 +1,20 @@
 package com.office.officereportingsystem.exception;
 
-public class ProjectNotFoundException extends RuntimeException{
+public class ProjectNotFoundException extends ApplicationException{
 
-    private final String messageCode;
+    private final Object data;
 
-    public ProjectNotFoundException(String messageCode) {
-        super(messageCode);
-        this.messageCode = messageCode;
+    public ProjectNotFoundException() {
+        super("PROJECT_NOT_FOUND");
+        this.data = null;
     }
 
-    public String getMessageCode() {
-        return messageCode;
+    public ProjectNotFoundException(Object data) {
+        super("PROJECT_NOT_FOUND");
+        this.data = data;
+    }
+
+    public Object getData() {
+        return data;
     }
 }
